@@ -1,8 +1,10 @@
 import React, { useEffect, useRef } from 'react';
-import { useThree, useFrame } from '@react-three/fiber';
+import { useThree } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
-import * as THREE from 'three';
-import gsap from 'gsap';
+import gsapModule from 'gsap';
+
+// Resilient fallback for both ESM and CJS bundle exports
+const gsap = (gsapModule as any)?.gsap || gsapModule;
 
 interface CameraControllerProps {
   currentSection?: number;
@@ -54,25 +56,30 @@ export const CameraController: React.FC<CameraControllerProps> = ({
       };
     }
 
-    gsap.to(camera.position, {
-      x: targetCamPos.x,
-      y: targetCamPos.y,
-      z: targetCamPos.z,
-      duration,
-      ease: 'power2.inOut',
-      onUpdate: () => {
-        camera.lookAt(targetLookAt.x, targetLookAt.y, targetLookAt.z);
-      },
-    });
-
-    if (controlsRef.current) {
-      gsap.to(controlsRef.current.target, {
-        x: targetLookAt.x,
-        y: targetLookAt.y,
-        z: targetLookAt.z,
+    if (gsap && gsap.to) {
+      gsap.to(camera.position, {
+        x: targetCamPos.x,
+        y: targetCamPos.y,
+        z: targetCamPos.z,
         duration,
         ease: 'power2.inOut',
+        onUpdate: () => {
+          camera.lookAt(targetLookAt.x, targetLookAt.y, targetLookAt.z);
+        },
       });
+
+      if (controlsRef.current) {
+        gsap.to(controlsRef.current.target, {
+          x: targetLookAt.x,
+          y: targetLookAt.y,
+          z: targetLookAt.z,
+          duration,
+          ease: 'power2.inOut',
+        });
+      }
+    } else {
+      camera.position.set(targetCamPos.x, targetCamPos.y, targetCamPos.z);
+      camera.lookAt(targetLookAt.x, targetLookAt.y, targetLookAt.z);
     }
   }, [currentSection, focusedCoordinates, camera]);
 

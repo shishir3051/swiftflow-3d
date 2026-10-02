@@ -1,14 +1,12 @@
 import React, { useState, useEffect, Suspense } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { EarthSphere } from './EarthSphere';
-import { BankHubNodes } from './BankHubNodes';
-import { PaymentArcStream } from './PaymentArcStream';
-import { CameraController } from './CameraController';
 import { StaticGlobeFallback } from './StaticGlobeFallback';
 import { MessageInspectorModal } from '../ui/MessageInspectorModal';
 import { SAMPLE_TRANSACTIONS } from '../../data/sampleTransactions';
 import type { PaymentArcData } from '../../types/swift';
 import type { FinancialHub } from '../../types/globe';
+
+// Lazy load R3F Canvas only in the browser to completely prevent SSR WebGL/Zustand compilation errors
+const CanvasScene = React.lazy(() => import('./CanvasScene'));
 
 interface GlobeSceneProps {
   currentSection?: number;
@@ -19,14 +17,17 @@ export default function GlobeScene({
   currentSection = 0,
   initialSelectedTxId,
 }: GlobeSceneProps) {
+  const [mounted, setMounted] = useState<boolean>(false);
   const [selectedTx, setSelectedTx] = useState<PaymentArcData | null>(null);
   const [selectedHub, setSelectedHub] = useState<FinancialHub | null>(null);
   const [webGlSupported, setWebGlSupported] = useState<boolean>(true);
   const [force2D, setForce2D] = useState<boolean>(false);
   const [autoRotate, setAutoRotate] = useState<boolean>(true);
 
-  // Check WebGL availability on mount
+  // Mount only on client
   useEffect(() => {
+    setMounted(true);
+
     try {
       const canvas = document.createElement('canvas');
       const gl =
@@ -38,7 +39,6 @@ export default function GlobeScene({
       setWebGlSupported(false);
     }
 
-    // Check user's preferred motion setting
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       setAutoRotate(false);
     }
@@ -76,7 +76,6 @@ export default function GlobeScene({
 
   const handleSelectHub = (hub: FinancialHub) => {
     setSelectedHub(hub);
-    // Find transaction originating or terminating at this hub
     const relatedTx = SAMPLE_TRANSACTIONS.find(
       (t) => t.sourceHubId === hub.id || t.targetHubId === hub.id
     );
@@ -85,12 +84,12 @@ export default function GlobeScene({
     }
   };
 
-  // Render static 2D fallback if WebGL not supported or 2D explicitly chosen
-  if (!webGlSupported || force2D) {
+  // SSR Placeholder or Fallback if WebGL unsupported / 2D mode forced
+  if (!mounted || !webGlSupported || force2D) {
     return (
       <div className="relative w-full max-w-7xl mx-auto">
         <div className="flex justify-end mb-2">
-          {webGlSupported && (
+          {mounted && webGlSupported && (
             <button
               onClick={() => setForce2D(false)}
               className="px-3 py-1 rounded bg-slate-800 text-xs text-cyan-400 hover:bg-slate-700 border border-slate-700 font-mono transition-all"
@@ -175,32 +174,17 @@ export default function GlobeScene({
         </div>
       </div>
 
-      {/* R3F Canvas Container */}
-      <Canvas
-        camera={{ position: [0, 1.2, 5.5], fov: 45 }}
-        gl={{ antialias: true, alpha: true }}
-        dpr={[1, 2]}
-      >
-        <ambientLight intensity={0.4} />
-        <directionalLight position={[5, 3, 5]} intensity={1.2} color="#ffffff" />
-        <pointLight position={[-5, -3, -5]} intensity={0.6} color="#06b6d4" />
-        <pointLight position={[0, 6, 0]} intensity={0.8} color="#3b82f6" />
-
-        <Suspense fallback={null}>
-          <EarthSphere radius={2.5} autoRotate={autoRotate} />
-          <BankHubNodes
-            globeRadius={2.5}
-            selectedHubId={selectedHub?.id}
-            onSelectHub={handleSelectHub}
-          />
-          <PaymentArcStream
-            globeRadius={2.5}
-            selectedArcId={selectedTx?.id}
-            onSelectArc={handleSelectArc}
-          />
-          <CameraController currentSection={currentSection} />
-        </Suspense>
-      </Canvas>
+      {/* R3F Canvas Container dynamically hydrated */}
+      <Suspense fallback={<StaticGlobeFallback selectedArcId={selectedTx?.id} onSelectArc={handleSelectArc} onSelectHub={handleSelectHub} />}>
+        <CanvasScene
+          autoRotate={autoRotate}
+          selectedHub={selectedHub}
+          selectedTx={selectedTx}
+          currentSection={currentSection}
+          onSelectHub={handleSelectHub}
+          onSelectArc={handleSelectArc}
+        />
+      </Suspense>
 
       {/* Interactive Modal Inspector */}
       {selectedTx && (

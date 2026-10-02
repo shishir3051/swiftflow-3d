@@ -17,6 +17,8 @@ export const EarthSphere: React.FC<EarthSphereProps> = ({
 
   // Generate high-resolution procedural dark grid / tech texture for globe surface
   const globeTexture = useMemo(() => {
+    if (typeof document === 'undefined') return null;
+
     const canvas = document.createElement('canvas');
     canvas.width = 2048;
     canvas.height = 1024;
@@ -51,7 +53,6 @@ export const EarthSphere: React.FC<EarthSphereProps> = ({
       for (let i = 0; i < 4000; i++) {
         const x = Math.random() * canvas.width;
         const y = Math.random() * canvas.height;
-        // Simple shape biasing to make continents look organic
         const inEquator = Math.abs(y - 512) < 380;
         if (inEquator && Math.sin(x * 0.01) * Math.cos(y * 0.01) > -0.25) {
           ctx.beginPath();
@@ -81,7 +82,7 @@ export const EarthSphere: React.FC<EarthSphereProps> = ({
       <mesh ref={meshRef} receiveShadow castShadow>
         <sphereGeometry args={[radius, 64, 64]} />
         <meshStandardMaterial
-          map={globeTexture}
+          map={globeTexture || undefined}
           roughness={0.7}
           metalness={0.2}
           emissive="#030712"
