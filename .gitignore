@@ -1,11 +1,11 @@
 # Node & Build artifacts
 node_modules/
 dist/
-.astro/
+#.astro/
 
 # Environment variables
-.env
-.env.production
+#.env
+#.env.production
 
 # Logs & Diagnostics
 npm-debug.log*
@@ -16,8 +16,8 @@ pnpm-debug.log*
 # Testing
 playwright-report/
 test-results/
-.vitest/
+#.vitest/
 
 # OS files
-.DS_Store
-Thumbs.db
+#.DS_Store
+#Thumbs.db

@@ -3,6 +3,7 @@ import confetti from 'canvas-confetti';
 import { SAMPLE_TRANSACTIONS } from '../../data/sampleTransactions';
 import { validateXmlWellFormedness } from '../../lib/xmlValidator';
 import type { XmlValidationResult } from '../../lib/xmlValidator';
+import { XmlViewer } from './XmlViewer';
 
 export const ConverterPanel: React.FC = () => {
   const [selectedTxId, setSelectedTxId] = useState<string>(SAMPLE_TRANSACTIONS[0].id);
@@ -310,34 +311,45 @@ export const ConverterPanel: React.FC = () => {
           <div className="flex flex-col space-y-3">
             <div className="flex items-center justify-between text-xs font-mono">
               {/* Output Tab Switches */}
-              <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800">
+              <div
+                role="tablist"
+                aria-label="Converter Output Views"
+                className="flex items-center gap-1 bg-slate-950/90 p-1 rounded-xl border border-slate-800/80 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] no-scrollbar"
+              >
                 <button
+                  role="tab"
+                  aria-selected={activeTab === 'explanation'}
                   onClick={() => setActiveTab('explanation')}
-                  className={`px-3 py-1 rounded-lg transition-all ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-150 ${
                     activeTab === 'explanation'
-                      ? 'bg-cyan-500/20 text-cyan-300 font-semibold'
-                      : 'text-slate-400 hover:text-slate-200'
+                      ? 'bg-slate-800 text-white font-semibold border border-slate-700/80 shadow-sm ring-1 ring-cyan-500/20'
+                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
                   }`}
                 >
                   AI Explanation
                 </button>
                 <button
+                  role="tab"
+                  aria-selected={activeTab === 'xml'}
                   onClick={() => setActiveTab('xml')}
-                  className={`px-3 py-1 rounded-lg transition-all ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-150 flex items-center gap-1.5 ${
                     activeTab === 'xml'
-                      ? 'bg-cyan-500/20 text-cyan-300 font-semibold'
-                      : 'text-slate-400 hover:text-slate-200'
+                      ? 'bg-slate-800 text-white font-semibold border border-slate-700/80 shadow-sm ring-1 ring-cyan-500/20'
+                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
                   }`}
                 >
-                  pacs.008 XML
+                  <span>pacs.008 XML</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
                 </button>
                 {parsedMeta && (
                   <button
+                    role="tab"
+                    aria-selected={activeTab === 'audit'}
                     onClick={() => setActiveTab('audit')}
-                    className={`px-3 py-1 rounded-lg transition-all ${
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-150 ${
                       activeTab === 'audit'
-                        ? 'bg-cyan-500/20 text-cyan-300 font-semibold'
-                        : 'text-slate-400 hover:text-slate-200'
+                        ? 'bg-slate-800 text-white font-semibold border border-slate-700/80 shadow-sm ring-1 ring-cyan-500/20'
+                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
                     }`}
                   >
                     Parsed Meta
@@ -400,20 +412,8 @@ export const ConverterPanel: React.FC = () => {
 
               {/* Streaming Tab 2: pacs.008 XML */}
               {activeTab === 'xml' && (
-                <div className="relative">
-                  {xmlOutput && (
-                    <div className="sticky top-0 right-0 flex justify-end mb-2">
-                      <button
-                        onClick={handleCopyXml}
-                        className="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-cyan-300 font-mono text-xs border border-slate-700 transition-colors"
-                      >
-                        {copySuccess ? '✓ Copied' : 'Copy XML'}
-                      </button>
-                    </div>
-                  )}
-                  <pre className="text-emerald-400 overflow-x-auto">
-                    {xmlOutput || (isStreaming ? 'Generating pacs.008 XML schema nodes...' : '')}
-                  </pre>
+                <div className="w-full -m-2">
+                  <XmlViewer xml={xmlOutput} isStreaming={isStreaming} />
                 </div>
               )}
 

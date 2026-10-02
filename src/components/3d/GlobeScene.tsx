@@ -11,11 +11,15 @@ const CanvasScene = React.lazy(() => import('./CanvasScene'));
 interface GlobeSceneProps {
   currentSection?: number;
   initialSelectedTxId?: string;
+  onSelectTx?: (tx: PaymentArcData) => void;
+  isModalOpen?: boolean;
 }
 
 export default function GlobeScene({
   currentSection = 0,
   initialSelectedTxId,
+  onSelectTx,
+  isModalOpen = false,
 }: GlobeSceneProps) {
   const [mounted, setMounted] = useState<boolean>(false);
   const [selectedTx, setSelectedTx] = useState<PaymentArcData | null>(null);
@@ -45,16 +49,20 @@ export default function GlobeScene({
 
     if (initialSelectedTxId) {
       const found = SAMPLE_TRANSACTIONS.find((t) => t.id === initialSelectedTxId);
-      if (found) setSelectedTx(found);
+      if (found) {
+        if (onSelectTx) onSelectTx(found);
+        else setSelectedTx(found);
+      }
     }
-  }, [initialSelectedTxId]);
+  }, [initialSelectedTxId, onSelectTx]);
 
   // Listen to custom global events for selecting transactions
   useEffect(() => {
     const handleSelectTxEvent = (e: CustomEvent<string>) => {
       const tx = SAMPLE_TRANSACTIONS.find((t) => t.id === e.detail);
       if (tx) {
-        setSelectedTx(tx);
+        if (onSelectTx) onSelectTx(tx);
+        else setSelectedTx(tx);
       }
     };
 
@@ -68,10 +76,14 @@ export default function GlobeScene({
         handleSelectTxEvent as EventListener
       );
     };
-  }, []);
+  }, [onSelectTx]);
 
   const handleSelectArc = (arc: PaymentArcData) => {
-    setSelectedTx(arc);
+    if (onSelectTx) {
+      onSelectTx(arc);
+    } else {
+      setSelectedTx(arc);
+    }
   };
 
   const handleSelectHub = (hub: FinancialHub) => {
@@ -80,9 +92,15 @@ export default function GlobeScene({
       (t) => t.sourceHubId === hub.id || t.targetHubId === hub.id
     );
     if (relatedTx) {
-      setSelectedTx(relatedTx);
+      if (onSelectTx) {
+        onSelectTx(relatedTx);
+      } else {
+        setSelectedTx(relatedTx);
+      }
     }
   };
+
+  const modalActive = isModalOpen || !!selectedTx;
 
   // SSR Placeholder or Fallback if WebGL unsupported / 2D mode forced
   if (!mounted || !webGlSupported || force2D) {
@@ -103,7 +121,7 @@ export default function GlobeScene({
           onSelectArc={handleSelectArc}
           onSelectHub={handleSelectHub}
         />
-        {selectedTx && (
+        {!onSelectTx && selectedTx && (
           <MessageInspectorModal
             transaction={selectedTx}
             onClose={() => setSelectedTx(null)}
@@ -119,31 +137,33 @@ export default function GlobeScene({
       <div className="absolute top-4 left-4 right-4 z-20 flex items-center justify-between pointer-events-none">
         <div className="flex items-center gap-2 pointer-events-auto">
           <span className="flex h-2.5 w-2.5 relative">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-500" />
           </span>
-          <span className="text-xs font-mono text-slate-300 bg-slate-900/80 backdrop-blur-md px-2.5 py-1 rounded-full border border-slate-700">
-            SIMULATED INTERBANK MESH
+          <span className="text-xs font-mono font-semibold tracking-wider text-slate-200 uppercase bg-slate-900/80 backdrop-blur-md px-2.5 py-1 rounded-md border border-slate-800">
+            SIMULATED INTERBANK SETTLEMENT RAIL (RTGS)
           </span>
         </div>
 
         <div className="flex items-center gap-2 pointer-events-auto">
+          {/* Auto Rotation Toggle */}
           <button
             onClick={() => setAutoRotate(!autoRotate)}
-            className={`px-3 py-1 rounded-full text-xs font-mono border backdrop-blur-md transition-all ${
+            className={`px-3 py-1 rounded-md text-xs font-mono border transition-all ${
               autoRotate
                 ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/50'
-                : 'bg-slate-900/80 text-slate-400 border-slate-700'
+                : 'bg-slate-900/80 text-slate-400 border-slate-800 hover:text-white'
             }`}
-            title="Toggle globe rotation"
+            aria-label="Toggle auto rotation"
           >
-            {autoRotate ? 'Auto-Rotate ON' : 'Auto-Rotate PAUSED'}
+            Rotate {autoRotate ? 'ON' : 'OFF'}
           </button>
 
+          {/* 2D Fallback Switcher */}
           <button
             onClick={() => setForce2D(true)}
-            className="px-3 py-1 rounded-full text-xs font-mono text-slate-400 hover:text-white bg-slate-900/80 border border-slate-700 hover:border-slate-500 backdrop-blur-md transition-all"
-            title="Switch to lightweight 2D view"
+            className="px-3 py-1 rounded-md text-xs font-mono bg-slate-900/80 text-slate-400 border border-slate-800 hover:text-white hover:border-slate-700 transition-all"
+            aria-label="Switch to 2D Fallback Map"
           >
             2D Mode
           </button>
@@ -161,7 +181,7 @@ export default function GlobeScene({
           {SAMPLE_TRANSACTIONS.slice(0, 4).map((tx) => (
             <button
               key={`quick-btn-${tx.id}`}
-              onClick={() => setSelectedTx(tx)}
+              onClick={() => handleSelectArc(tx)}
               className={`px-2.5 py-1 rounded-full text-[11px] font-mono whitespace-nowrap transition-all border ${
                 selectedTx?.id === tx.id
                   ? 'bg-cyan-500 text-slate-950 font-bold border-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.5)]'
@@ -181,13 +201,14 @@ export default function GlobeScene({
           selectedHub={selectedHub}
           selectedTx={selectedTx}
           currentSection={currentSection}
+          isModalOpen={modalActive}
           onSelectHub={handleSelectHub}
           onSelectArc={handleSelectArc}
         />
       </Suspense>
 
-      {/* Interactive Modal Inspector */}
-      {selectedTx && (
+      {/* Interactive Modal Inspector - only render if not handled by parent workspace */}
+      {!onSelectTx && selectedTx && (
         <MessageInspectorModal
           transaction={selectedTx}
           onClose={() => setSelectedTx(null)}

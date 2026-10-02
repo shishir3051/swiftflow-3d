@@ -14,15 +14,37 @@
 
   html {
     scroll-behavior: smooth;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  html.dark {
     background-color: #030712;
     color: #f8fafc;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color-scheme: dark;
+  }
+
+  html:not(.dark),
+  html.light {
+    background-color: #f8fafc;
+    color: #0f172a;
+    color-scheme: light;
   }
 
   body {
     overflow-x: hidden;
     min-height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  html.dark body {
     background: radial-gradient(circle at 50% 0%, #0a1329 0%, #030712 70%);
+    color: #f8fafc;
+  }
+
+  html:not(.dark) body,
+  html.light body {
+    background: radial-gradient(circle at 50% 0%, #f8fafc 0%, #eef2f6 100%) !important;
+    color: #0f172a !important;
   }
 
   /* Accessible focus indicators */
@@ -46,15 +68,37 @@
   ::-webkit-scrollbar-thumb:hover {
     background: #334155;
   }
+
+  html:not(.dark) ::-webkit-scrollbar-track,
+  html.light ::-webkit-scrollbar-track {
+    background: #f1f5f9;
+  }
+  html:not(.dark) ::-webkit-scrollbar-thumb,
+  html.light ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+  }
+  html:not(.dark) ::-webkit-scrollbar-thumb:hover,
+  html.light ::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }
 }
 
 @layer components {
+  /* Glass card in dark vs light mode */
   .glass-card {
     background: rgba(15, 23, 42, 0.7);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border: 1px solid rgba(255, 255, 255, 0.08);
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  html:not(.dark) .glass-card,
+  html.light .glass-card {
+    background: rgba(255, 255, 255, 0.88) !important;
+    border: 1px solid rgba(226, 232, 240, 0.9) !important;
+    box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(226, 232, 240, 0.6) !important;
   }
 
   .glass-card-hover {
@@ -64,6 +108,12 @@
     border-color: rgba(6, 182, 212, 0.4);
     box-shadow: 0 12px 40px 0 rgba(6, 182, 212, 0.15);
     transform: translateY(-2px);
+  }
+
+  html:not(.dark) .glass-card-hover:hover,
+  html.light .glass-card-hover:hover {
+    border-color: rgba(6, 182, 212, 0.5) !important;
+    box-shadow: 0 14px 35px -5px rgba(6, 182, 212, 0.18) !important;
   }
 
   .glass-button {
@@ -78,6 +128,13 @@
     box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
   }
 
+  html:not(.dark) .glass-button,
+  html.light .glass-button {
+    background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(59, 130, 246, 0.1)) !important;
+    border-color: rgba(6, 182, 212, 0.35) !important;
+    color: #0284c7 !important;
+  }
+
   .text-glow {
     text-shadow: 0 0 20px rgba(6, 182, 212, 0.5);
   }
@@ -88,4 +145,182 @@
       linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
       linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
   }
+
+  html:not(.dark) .grid-pattern,
+  html.light .grid-pattern {
+    background-image: 
+      linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px) !important;
+  }
+
+  /* Utility to completely hide scrollbars while preserving scrolling */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
+  }
+}
+
+/* =========================================================================
+   LIGHT THEME INTERACTIVE OVERRIDES
+   ========================================================================= */
+
+html:not(.dark) h1,
+html:not(.dark) h2,
+html:not(.dark) h3,
+html:not(.dark) h4,
+html.light h1,
+html.light h2,
+html.light h3,
+html.light h4 {
+  color: #0f172a !important;
+}
+
+html:not(.dark) .text-slate-100,
+html.light .text-slate-100 {
+  color: #0f172a !important;
+}
+
+html:not(.dark) .text-slate-200,
+html.light .text-slate-200 {
+  color: #1e293b !important;
+}
+
+html:not(.dark) .text-slate-300,
+html.light .text-slate-300 {
+  color: #334155 !important;
+}
+
+html:not(.dark) .text-slate-400,
+html.light .text-slate-400 {
+  color: #64748b !important;
+}
+
+/* Header in light mode */
+html:not(.dark) header,
+html.light header {
+  background-color: rgba(255, 255, 255, 0.88) !important;
+  border-bottom-color: #e2e8f0 !important;
+}
+
+html:not(.dark) header .text-white,
+html.light header .text-white {
+  color: #0f172a !important;
+}
+
+html:not(.dark) header nav a,
+html.light header nav a {
+  color: #475569 !important;
+}
+
+html:not(.dark) header nav a:hover,
+html.light header nav a:hover {
+  color: #0284c7 !important;
+}
+
+/* Fintech Control Deck Sticky Ribbon in light mode */
+html:not(.dark) .sticky.top-16,
+html.light .sticky.top-16 {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-bottom-color: #e2e8f0 !important;
+}
+
+/* Workspace Tabs in light mode */
+html:not(.dark) [role="tablist"],
+html.light [role="tablist"] {
+  background-color: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+}
+
+html:not(.dark) [role="tab"][aria-selected="true"],
+html.light [role="tab"][aria-selected="true"] {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #06b6d4 !important;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08) !important;
+}
+
+html:not(.dark) [role="tab"][aria-selected="false"],
+html.light [role="tab"][aria-selected="false"] {
+  color: #64748b !important;
+}
+
+html:not(.dark) [role="tab"][aria-selected="false"]:hover,
+html.light [role="tab"][aria-selected="false"]:hover {
+  color: #0f172a !important;
+  background-color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Control deck widgets in light mode */
+html:not(.dark) .sticky.top-16 .bg-slate-950\/80,
+html.light .sticky.top-16 .bg-slate-950\/80 {
+  background-color: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+}
+
+/* Live Metrics Bar in light mode */
+html:not(.dark) .bg-slate-950\/80.border-y,
+html.light .bg-slate-950\/80.border-y {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  border-color: #e2e8f0 !important;
+  color: #475569 !important;
+}
+
+html:not(.dark) .bg-slate-950\/80.border-y .text-white,
+html.light .bg-slate-950\/80.border-y .text-white {
+  color: #0f172a !important;
+}
+
+/* Surfaces and borders in light mode (excluding code/xml viewer boxes) */
+html:not(.dark) .bg-slate-950:not(.xml-viewer-box):not(pre):not(code),
+html:not(.dark) .bg-slate-950\/90:not(.xml-viewer-box):not(pre):not(code),
+html:not(.dark) .bg-slate-950\/80:not(.xml-viewer-box):not(pre):not(code),
+html:not(.dark) .bg-slate-950\/60:not(.xml-viewer-box):not(pre):not(code),
+html.light .bg-slate-950:not(.xml-viewer-box):not(pre):not(code),
+html.light .bg-slate-950\/90:not(.xml-viewer-box):not(pre):not(code),
+html.light .bg-slate-950\/80:not(.xml-viewer-box):not(pre):not(code),
+html.light .bg-slate-950\/60:not(.xml-viewer-box):not(pre):not(code) {
+  background-color: rgba(255, 255, 255, 0.92) !important;
+}
+
+html:not(.dark) .bg-slate-900:not(.xml-viewer-box):not(pre):not(code),
+html:not(.dark) .bg-slate-900\/90:not(.xml-viewer-box):not(pre):not(code),
+html:not(.dark) .bg-slate-900\/80:not(.xml-viewer-box):not(pre):not(code),
+html:not(.dark) .bg-slate-900\/60:not(.xml-viewer-box):not(pre):not(code),
+html:not(.dark) .bg-slate-900\/50:not(.xml-viewer-box):not(pre):not(code),
+html:not(.dark) .bg-slate-900\/40:not(.xml-viewer-box):not(pre):not(code),
+html.light .bg-slate-900:not(.xml-viewer-box):not(pre):not(code),
+html.light .bg-slate-900\/90:not(.xml-viewer-box):not(pre):not(code),
+html.light .bg-slate-900\/80:not(.xml-viewer-box):not(pre):not(code),
+html.light .bg-slate-900\/60:not(.xml-viewer-box):not(pre):not(code),
+html.light .bg-slate-900\/50:not(.xml-viewer-box):not(pre):not(code),
+html.light .bg-slate-900\/40:not(.xml-viewer-box):not(pre):not(code) {
+  background-color: #f8fafc !important;
+}
+
+html:not(.dark) .border-slate-800:not(.xml-viewer-box),
+html:not(.dark) .border-slate-800\/80:not(.xml-viewer-box),
+html:not(.dark) .border-slate-800\/90:not(.xml-viewer-box),
+html:not(.dark) .border-slate-800\/60:not(.xml-viewer-box),
+html:not(.dark) .border-slate-700:not(.xml-viewer-box),
+html:not(.dark) .border-slate-700\/80:not(.xml-viewer-box),
+html.light .border-slate-800:not(.xml-viewer-box),
+html.light .border-slate-800\/80:not(.xml-viewer-box),
+html.light .border-slate-800\/90:not(.xml-viewer-box),
+html.light .border-slate-800\/60:not(.xml-viewer-box),
+html.light .border-slate-700:not(.xml-viewer-box),
+html.light .border-slate-700\/80:not(.xml-viewer-box) {
+  border-color: #e2e8f0 !important;
+}
+
+/* Modals in light mode */
+html:not(.dark) .bg-slate-900\/95,
+html.light .bg-slate-900\/95 {
+  background-color: rgba(255, 255, 255, 0.98) !important;
+  color: #0f172a !important;
 }

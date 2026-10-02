@@ -12,6 +12,7 @@ interface CanvasSceneProps {
   selectedHub: FinancialHub | null;
   selectedTx: PaymentArcData | null;
   currentSection: number;
+  isModalOpen?: boolean;
   onSelectHub: (hub: FinancialHub) => void;
   onSelectArc: (arc: PaymentArcData) => void;
 }
@@ -21,6 +22,7 @@ export default function CanvasScene({
   selectedHub,
   selectedTx,
   currentSection,
+  isModalOpen = false,
   onSelectHub,
   onSelectArc,
 }: CanvasSceneProps) {
@@ -41,6 +43,7 @@ export default function CanvasScene({
           globeRadius={2.5}
           selectedHubId={selectedHub?.id}
           onSelectHub={onSelectHub}
+          isModalOpen={isModalOpen || !!selectedTx}
         />
         <PaymentArcStream
           globeRadius={2.5}

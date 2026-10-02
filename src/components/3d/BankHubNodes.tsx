@@ -10,12 +10,14 @@ interface BankHubNodesProps {
   globeRadius: number;
   selectedHubId?: string | null;
   onSelectHub?: (hub: FinancialHub) => void;
+  isModalOpen?: boolean;
 }
 
 export const BankHubNodes: React.FC<BankHubNodesProps> = ({
   globeRadius,
   selectedHubId,
   onSelectHub,
+  isModalOpen = false,
 }) => {
   const pulseRingsRef = useRef<THREE.Group>(null);
 
@@ -87,35 +89,38 @@ export const BankHubNodes: React.FC<BankHubNodesProps> = ({
               />
             </mesh>
 
-            {/* Interactive HTML Label */}
-            <Html
-              position={[0, nodeSize * 2.2, 0]}
-              center
-              distanceFactor={8}
-              zIndexRange={[100, 0]}
-            >
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onSelectHub?.(hub);
-                }}
-                className={`group flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono whitespace-nowrap transition-all duration-200 pointer-events-auto ${
-                  isSelected
-                    ? 'bg-cyan-500/90 text-white shadow-[0_0_12px_rgba(6,182,212,0.8)] scale-110'
-                    : 'bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700/60 hover:border-cyan-500/50 backdrop-blur-md'
-                }`}
-                aria-label={`Inspect ${hub.city} Hub`}
+            {/* Interactive HTML Label - occlude ensures back-facing hubs are hidden; completely suppressed when modal is open */}
+            {!isModalOpen && (
+              <Html
+                position={[0, nodeSize * 2.2, 0]}
+                center
+                distanceFactor={8}
+                zIndexRange={[10, 0]}
+                occlude
               >
-                <span
-                  className="w-1.5 h-1.5 rounded-full animate-pulse"
-                  style={{ backgroundColor: hub.color }}
-                />
-                <span className="font-semibold tracking-wide">{hub.city}</span>
-                <span className="text-[8px] text-slate-400 group-hover:text-cyan-300">
-                  {hub.bicPrefix}
-                </span>
-              </button>
-            </Html>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onSelectHub?.(hub);
+                  }}
+                  className={`group flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono whitespace-nowrap transition-all duration-200 pointer-events-auto ${
+                    isSelected
+                      ? 'bg-cyan-500/90 text-white shadow-[0_0_12px_rgba(6,182,212,0.8)] scale-110'
+                      : 'bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700/60 hover:border-cyan-500/50 backdrop-blur-md'
+                  }`}
+                  aria-label={`Inspect ${hub.city} Hub`}
+                >
+                  <span
+                    className="w-1.5 h-1.5 rounded-full animate-pulse"
+                    style={{ backgroundColor: hub.color }}
+                  />
+                  <span className="font-semibold tracking-wide">{hub.city}</span>
+                  <span className="text-[8px] text-slate-400 group-hover:text-cyan-300">
+                    {hub.bicPrefix}
+                  </span>
+                </button>
+              </Html>
+            )}
           </group>
         );
       })}

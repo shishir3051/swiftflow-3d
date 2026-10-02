@@ -171,10 +171,12 @@ In legacy MT103, customer names and addresses are confined to truncated lines of
 ${fallbackXml}`;
 
       // Stream tokens with realistic micro-delays for high-end UX
-      const chunks = explanationText.match(/.{1,14}/g) || [explanationText];
-      for (const chunk of chunks) {
+      // Slice cleanly by character offset to guarantee 100% preservation of all newlines and indentation
+      const chunkSize = 28;
+      for (let i = 0; i < explanationText.length; i += chunkSize) {
+        const chunk = explanationText.slice(i, i + chunkSize);
         sendEvent('token', { text: chunk });
-        await new Promise((resolve) => setTimeout(resolve, 18));
+        await new Promise((resolve) => setTimeout(resolve, 14));
       }
 
       sendEvent('done', {

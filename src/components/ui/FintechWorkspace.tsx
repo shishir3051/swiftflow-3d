@@ -82,7 +82,13 @@ export const FintechWorkspace: React.FC = () => {
             <div className="flex flex-col gap-6 animate-fadeIn">
               {/* 3D WebGL Globe View */}
               <div className="w-full rounded-2xl overflow-hidden border border-slate-800 bg-slate-950/60 shadow-2xl relative">
-                <GlobeScene />
+                <GlobeScene
+                  onSelectTx={(tx) => {
+                    setSelectedTx(tx);
+                    soundFx.playBlip(650);
+                  }}
+                  isModalOpen={!!selectedTx}
+                />
               </div>
 
               {/* Accessible Corridor Quick-Select Deck */}
@@ -120,7 +126,7 @@ export const FintechWorkspace: React.FC = () => {
         </Suspense>
       </div>
 
-      {/* Global Transaction Drill-down Modal */}
+      {/* Global Transaction Drill-down Modal - Rendered cleanly via Portal to document.body */}
       {selectedTx && (
         <MessageInspectorModal
           transaction={selectedTx}
