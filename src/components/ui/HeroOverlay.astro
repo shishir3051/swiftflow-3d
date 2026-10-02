@@ -1,0 +1,72 @@
+---
+// HeroOverlay.astro
+---
+
+<div class="relative w-full max-w-7xl mx-auto px-4 sm:px-6 pt-10 pb-6 text-center space-y-6">
+  <!-- Pill Tag -->
+  <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/90 border border-slate-700/80 text-cyan-300 text-xs font-mono shadow-[0_0_20px_rgba(6,182,212,0.15)] backdrop-blur-md">
+    <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+    <span>NEXT-GEN INTERBANK PAYMENTS • ASTRO + THREE.JS + ANTHROPIC</span>
+  </div>
+
+  <!-- Primary Headline -->
+  <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black text-white tracking-tight leading-[1.1] max-w-5xl mx-auto">
+    Interactive 3D Interbank Rail & <span class="bg-gradient-to-r from-cyan-400 via-teal-300 to-blue-500 bg-clip-text text-transparent">ISO 20022 Migration</span>
+  </h1>
+
+  <!-- Subtitle -->
+  <p class="text-slate-300 text-base sm:text-lg max-w-3xl mx-auto leading-relaxed font-sans">
+    Visualize real-time simulated SWIFT payment flows across world financial centers. Inspect legacy MT103 FIN messages and stream full <span class="text-cyan-300 font-mono">pacs.008.001.08</span> XML translations powered by high-performance Astro islands.
+  </p>
+
+  <!-- CTA Buttons -->
+  <div class="flex flex-wrap items-center justify-center gap-4 pt-2">
+    <a
+      href="#globe-section"
+      class="px-6 py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-sm transition-all shadow-[0_0_25px_rgba(6,182,212,0.4)] transform hover:-translate-y-0.5 flex items-center gap-2"
+    >
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span>Explore 3D Mesh</span>
+    </a>
+
+    <a
+      href="#converter-section"
+      class="glass-button px-6 py-3.5 rounded-xl text-slate-200 hover:text-white font-semibold text-sm transition-all flex items-center gap-2"
+    >
+      <svg class="w-4 h-4 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+      </svg>
+      <span>Launch AI Studio</span>
+    </a>
+  </div>
+
+  <!-- Key Metrics Bar -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto pt-8">
+    <div class="glass-card p-4 rounded-2xl text-left border border-slate-800">
+      <div class="text-[10px] font-mono text-slate-400 uppercase tracking-wider">Simulated In-Flight</div>
+      <div class="text-xl sm:text-2xl font-black text-cyan-300 mt-0.5">$73.8M USD</div>
+      <div class="text-[10px] text-slate-400 mt-1">Across 6 major clearing hubs</div>
+    </div>
+
+    <div class="glass-card p-4 rounded-2xl text-left border border-slate-800">
+      <div class="text-[10px] font-mono text-slate-400 uppercase tracking-wider">Global Corridors</div>
+      <div class="text-xl sm:text-2xl font-black text-blue-400 mt-0.5">10 Active Hubs</div>
+      <div class="text-[10px] text-slate-400 mt-1">NYC, LON, FRA, TKY, SIN...</div>
+    </div>
+
+    <div class="glass-card p-4 rounded-2xl text-left border border-slate-800">
+      <div class="text-[10px] font-mono text-slate-400 uppercase tracking-wider">XML Validation</div>
+      <div class="text-xl sm:text-2xl font-black text-emerald-400 mt-0.5">100% W3C</div>
+      <div class="text-[10px] text-slate-400 mt-1">pacs.008 schema compliant</div>
+    </div>
+
+    <div class="glass-card p-4 rounded-2xl text-left border border-slate-800">
+      <div class="text-[10px] font-mono text-slate-400 uppercase tracking-wider">Performance</div>
+      <div class="text-xl sm:text-2xl font-black text-teal-300 mt-0.5">Lighthouse 90+</div>
+      <div class="text-[10px] text-slate-400 mt-1">client:visible lazy 3D island</div>
+    </div>
+  </div>
+</div>

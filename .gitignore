@@ -1,0 +1,23 @@
+# Node & Build artifacts
+node_modules/
+dist/
+.astro/
+
+# Environment variables
+.env
+.env.production
+
+# Logs & Diagnostics
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Testing
+playwright-report/
+test-results/
+.vitest/
+
+# OS files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,158 @@
+---
+// ScrollStory.astro
+---
+
+<div id="story-section" class="relative w-full max-w-7xl mx-auto px-4 sm:px-6 my-24 space-y-32">
+  <!-- Section 1: The Problem of Legacy MT -->
+  <div class="scroll-story-card grid grid-cols-1 lg:grid-cols-2 gap-12 items-center" data-step="1">
+    <div class="space-y-6">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-950/60 border border-rose-800/40 text-rose-300 text-xs font-mono">
+        <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+        <span>STAGE 01: THE LEGACY CONSTRAINTS</span>
+      </div>
+      <h3 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+        The Fragility of 1970s <span class="text-rose-400">SWIFT MT</span> Messages
+      </h3>
+      <p class="text-slate-300 leading-relaxed text-base">
+        Since 1977, cross-border banking has relied on telegraphic MT103 FIN messages. Designed for 80-column punch cards and 300-baud modems, MT messages force rich corporate trade into rigid, 35-character ASCII fields.
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+        <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
+          <div class="text-rose-400 font-bold text-sm">35-Character Truncation</div>
+          <p class="text-xs text-slate-400">
+            Field :50K: and :59: split complex company names and international addresses into arbitrary 35-character slices.
+          </p>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
+          <div class="text-rose-400 font-bold text-sm">80%+ AML False Positives</div>
+          <p class="text-xs text-slate-400">
+            Unstructured text forces compliance algorithms to guess whether a string is a street name, a town, or a sanctioned entity.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Code visual artifact -->
+    <div class="relative glass-card rounded-2xl p-6 border border-rose-900/40 shadow-2xl">
+      <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-800 text-xs font-mono text-slate-400">
+        <span>Legacy MT103 Punch Format</span>
+        <span class="text-rose-400 font-bold">Unstructured Text</span>
+      </div>
+      <pre class="text-xs font-mono text-rose-300/90 leading-relaxed overflow-x-auto whitespace-pre">
+:50K:/US120000000987654321
+NORTHERN MERIDIAN CAPITAL LLC
+450 LEXINGTON AVENUE, FL 32
+NEW YORK, NY 10017 US
+:70:/INV/2026-COUPON-88192
+BOND COUPON PAYMENT OCT 2026
+:71A:SHA</pre>
+      <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-slate-400 font-mono flex items-center gap-2">
+        <span class="text-rose-400">⚠</span>
+        <span>Loss of invoice itemization, tax breakdown, and LEI validation.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2: The ISO 20022 Migration -->
+  <div class="scroll-story-card grid grid-cols-1 lg:grid-cols-2 gap-12 items-center" data-step="2">
+    <div class="order-2 lg:order-1 relative glass-card rounded-2xl p-6 border border-cyan-800/40 shadow-2xl">
+      <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-800 text-xs font-mono text-slate-400">
+        <span>ISO 20022 pacs.008 Structure</span>
+        <span class="text-cyan-400 font-bold">Typed XML Schema</span>
+      </div>
+      <pre class="text-xs font-mono text-cyan-300 leading-relaxed overflow-x-auto whitespace-pre">
+&lt;Dbtr&gt;
+  &lt;Nm&gt;NORTHERN MERIDIAN CAPITAL LLC&lt;/Nm&gt;
+  &lt;PstlAdr&gt;
+    &lt;StrtNm&gt;450 LEXINGTON AVENUE, FL 32&lt;/StrtNm&gt;
+    &lt;TwnNm&gt;NEW YORK&lt;/TwnNm&gt;
+    &lt;Ctry&gt;US&lt;/Ctry&gt;
+  &lt;/PstlAdr&gt;
+&lt;/Dbtr&gt;
+&lt;PmtId&gt;
+  &lt;UETR&gt;4f7b2a19-90d3-481e-84bf-9c7811ef42a0&lt;/UETR&gt;
+&lt;/PmtId&gt;</pre>
+      <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-slate-400 font-mono flex items-center gap-2">
+        <span class="text-cyan-400">✓</span>
+        <span>Deterministic address parsing and global real-time SWIFT gpi telemetry.</span>
+      </div>
+    </div>
+
+    <div class="order-1 lg:order-2 space-y-6">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/60 border border-cyan-800/40 text-cyan-300 text-xs font-mono">
+        <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+        <span>STAGE 02: THE GLOBAL MANDATE</span>
+      </div>
+      <h3 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+        The Worldwide Shift to <span class="text-cyan-400">ISO 20022 MX</span>
+      </h3>
+      <p class="text-slate-300 leading-relaxed text-base">
+        The SWIFT CBPR+ (Cross-Border Payments and Reporting Plus) programme, alongside central bank real-time gross settlement (RTGS) modernizations (FedNow, TARGET2, CHAPS, EURO1), mandates the replacement of MT messages with rich XML messages like <code class="text-cyan-300 bg-slate-900 px-1 py-0.5 rounded">pacs.008</code>.
+      </p>
+
+      <ul class="space-y-3 text-sm text-slate-300">
+        <li class="flex items-start gap-3">
+          <span class="w-5 h-5 rounded-full bg-cyan-500/20 text-cyan-300 flex items-center justify-center text-xs font-bold mt-0.5">✓</span>
+          <span><strong>Rich Remittance Data:</strong> Full commercial invoices, VAT/tax breakdowns, and credit notes ride natively within the payment envelope.</span>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="w-5 h-5 rounded-full bg-cyan-500/20 text-cyan-300 flex items-center justify-center text-xs font-bold mt-0.5">✓</span>
+          <span><strong>End-to-End Tracking (UETR):</strong> Real-time visibility across correspondent banking hops, cutting multi-day delays to minutes.</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Section 3: The Solution / Modern Rail -->
+  <div class="scroll-story-card grid grid-cols-1 lg:grid-cols-2 gap-12 items-center" data-step="3">
+    <div class="space-y-6">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/60 border border-emerald-800/40 text-emerald-300 text-xs font-mono">
+        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+        <span>STAGE 03: THE SWIFTFLOW SOLUTION</span>
+      </div>
+      <h3 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+        Automated AI Translation & <span class="text-emerald-400">Zero-Loss Bridging</span>
+      </h3>
+      <p class="text-slate-300 leading-relaxed text-base">
+        Financial institutions face a multi-year coexistence period where upstream counterparties still emit legacy MT103 while downstream clearing houses require strict pacs.008. SwiftFlow bridges this divide with high-speed deterministic parsing and LLM-assisted semantic enhancement.
+      </p>
+
+      <div class="pt-2">
+        <a
+          href="#converter-section"
+          class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition-all shadow-[0_0_20px_rgba(6,182,212,0.3)]"
+        >
+          <span>Try the Interactive Converter Below</span>
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Visual Architecture card -->
+    <div class="relative glass-card rounded-2xl p-6 border border-emerald-800/40 shadow-2xl">
+      <div class="text-xs font-mono text-emerald-400 font-bold mb-3 flex items-center justify-between">
+        <span>SwiftFlow Architecture</span>
+        <span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800/60">Sub-millisecond</span>
+      </div>
+      <div class="space-y-3 font-mono text-xs">
+        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between">
+          <span class="text-slate-400">1. FIN Ingestion</span>
+          <span class="text-amber-400 font-bold">MT103 Block Stream</span>
+        </div>
+        <div class="flex justify-center text-slate-600">↓</div>
+        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between">
+          <span class="text-slate-400">2. Deterministic AST Parser</span>
+          <span class="text-cyan-400 font-bold">Zod Validated Object</span>
+        </div>
+        <div class="flex justify-center text-slate-600">↓</div>
+        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between">
+          <span class="text-slate-400">3. AI Reasoning & ISO Gen</span>
+          <span class="text-emerald-400 font-bold">pacs.008.001.08 XML</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,113 @@
+---
+// src/pages/index.astro
+import Navbar from '../components/ui/Navbar.astro';
+import HeroOverlay from '../components/ui/HeroOverlay.astro';
+import GlobeScene from '../components/3d/GlobeScene';
+import ScrollStory from '../components/ui/ScrollStory.astro';
+import { ConverterPanel } from '../components/ui/ConverterPanel';
+import { ArcQuickList } from '../components/ui/ArcQuickList';
+import DisclaimerBanner from '../components/ui/DisclaimerBanner.astro';
+import Footer from '../components/ui/Footer.astro';
+import '../styles/global.css';
+
+const title = 'SwiftFlow 3D • Next-Gen Interbank Payment Globe & ISO 20022 Engine';
+const description = 'Interactive 3D visualization of simulated cross-border interbank payment flows, legacy SWIFT MT103 inspection, and AI-powered ISO 20022 pacs.008 XML conversion.';
+---
+
+<!doctype html>
+<html lang="en" class="dark scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- SEO Meta Tags -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content="SWIFT, MT103, ISO 20022, pacs.008, 3D Globe, Three.js, React Three Fiber, Astro, FinTech, Payments" />
+    <meta name="author" content="SwiftFlow 3D Engineering" />
+
+    <!-- Open Graph / Social Sharing -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:site_name" content="SwiftFlow 3D" />
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-space-950 text-slate-100 antialiased selection:bg-cyan-500/30 selection:text-cyan-200">
+    <!-- Top Disclaimer for synthetic data -->
+    <DisclaimerBanner />
+
+    <!-- Global Header -->
+    <Navbar />
+
+    <main id="main-content" class="relative z-10 flex flex-col items-center">
+      <!-- Hero Section -->
+      <section class="w-full relative pt-4 pb-8 overflow-hidden grid-pattern">
+        <HeroOverlay />
+
+        <!-- 3D Globe Island - Hydrated strictly with client:visible for maximum Lighthouse performance -->
+        <div id="globe-section" class="w-full max-w-7xl mx-auto px-4 sm:px-6 pt-4">
+          <GlobeScene client:visible />
+        </div>
+
+        <!-- Accessible Keyboard / Screen-Reader Corridor Registry -->
+        <ArcQuickList
+          client:idle
+          onSelectTx={(tx) => {
+            if (typeof window !== 'undefined') {
+              window.dispatchEvent(
+                new CustomEvent('swiftflow:select-tx', { detail: tx.id })
+              );
+            }
+          }}
+        />
+      </section>
+
+      <!-- Scroll Story Sections (MT Problem, ISO 20022 Migration, SwiftFlow Solution) -->
+      <ScrollStory />
+
+      <!-- Live AI Assistant & pacs.008 XML Converter Studio Island -->
+      <section class="w-full py-8">
+        <ConverterPanel client:visible />
+      </section>
+    </main>
+
+    <!-- Global Footer -->
+    <Footer />
+
+    <!-- GSAP Camera & Scroll Intersection Sync Script -->
+    <script>
+      // Setup IntersectionObserver to trigger smooth camera waypoints on scroll
+      if (typeof window !== 'undefined') {
+        const storyCards = document.querySelectorAll('.scroll-story-card');
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                const step = entry.target.getAttribute('data-step');
+                // Optional telemetry or camera event
+              }
+            });
+          },
+          { threshold: 0.4 }
+        );
+
+        storyCards.forEach((card) => observer.observe(card));
+      }
+    </script>
+  </body>
+</html>

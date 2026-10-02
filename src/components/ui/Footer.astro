@@ -1,0 +1,49 @@
+---
+// Footer.astro
+---
+
+<footer class="w-full bg-slate-950 border-t border-slate-800/80 py-12 px-4 sm:px-6">
+  <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+    <div class="space-y-2">
+      <div class="flex items-center gap-2">
+        <span class="font-bold text-white text-base tracking-tight">SwiftFlow 3D</span>
+        <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-cyan-950 text-cyan-300 border border-cyan-800">
+          Production Architecture
+        </span>
+      </div>
+      <p class="text-xs text-slate-400 max-w-md">
+        Simulated interbank cross-border payment globe and ISO 20022 MX migration assistant. Built with Astro islands architecture, React Three Fiber, GSAP, and Anthropic API.
+      </p>
+    </div>
+
+    <!-- Tech Stack Tags -->
+    <div class="flex flex-wrap gap-2 text-[11px] font-mono text-slate-400 max-w-lg">
+      <span class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800">Astro 4</span>
+      <span class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800">React Three Fiber</span>
+      <span class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800">Drei</span>
+      <span class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800">GSAP ScrollTrigger</span>
+      <span class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800">Tailwind CSS</span>
+      <span class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800">TypeScript Strict</span>
+      <span class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800">Vitest</span>
+      <span class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800">Playwright E2E</span>
+      <span class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800">Anthropic Claude</span>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto mt-8 pt-6 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between text-xs font-mono text-slate-500 gap-4">
+    <div>
+      © {new Date().getFullYear()} SwiftFlow 3D Portfolio Engineering Project.
+    </div>
+    <div class="flex items-center gap-6">
+      <a href="https://www.iso20022.org" target="_blank" rel="noopener noreferrer" class="hover:text-slate-300 transition-colors">
+        ISO 20022 Standards
+      </a>
+      <a href="https://www.swift.com/standards/iso-20022" target="_blank" rel="noopener noreferrer" class="hover:text-slate-300 transition-colors">
+        SWIFT CBPR+
+      </a>
+      <a href="#globe-section" class="hover:text-cyan-400 transition-colors">
+        Back to Top ↑
+      </a>
+    </div>
+  </div>
+</footer>
