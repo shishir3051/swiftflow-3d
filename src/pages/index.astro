@@ -2,10 +2,8 @@
 // src/pages/index.astro
 import Navbar from '../components/ui/Navbar.astro';
 import HeroOverlay from '../components/ui/HeroOverlay.astro';
-import GlobeScene from '../components/3d/GlobeScene';
+import { FintechWorkspace } from '../components/ui/FintechWorkspace';
 import ScrollStory from '../components/ui/ScrollStory.astro';
-import { ConverterPanel } from '../components/ui/ConverterPanel';
-import { ArcQuickList } from '../components/ui/ArcQuickList';
 import DisclaimerBanner from '../components/ui/DisclaimerBanner.astro';
 import Footer from '../components/ui/Footer.astro';
 import '../styles/global.css';
@@ -54,36 +52,20 @@ const description = 'Interactive 3D visualization of simulated cross-border inte
     <!-- Global Header -->
     <Navbar />
 
-    <main id="main-content" class="relative z-10 flex flex-col items-center">
-      <!-- Hero Section -->
-      <section class="w-full relative pt-4 pb-8 overflow-hidden grid-pattern">
+    <main id="main-content" class="relative z-10 flex flex-col items-center w-full">
+      <!-- Hero Header & Value Proposition -->
+      <section class="w-full relative pt-4 pb-2 overflow-hidden grid-pattern">
         <HeroOverlay />
+      </section>
 
-        <!-- 3D Globe Island - Hydrated strictly with client:visible for maximum Lighthouse performance -->
-        <div id="globe-section" class="w-full max-w-7xl mx-auto px-4 sm:px-6 pt-4">
-          <GlobeScene client:visible />
-        </div>
-
-        <!-- Accessible Keyboard / Screen-Reader Corridor Registry -->
-        <ArcQuickList
-          client:idle
-          onSelectTx={(tx) => {
-            if (typeof window !== 'undefined') {
-              window.dispatchEvent(
-                new CustomEvent('swiftflow:select-tx', { detail: tx.id })
-              );
-            }
-          }}
-        />
+      <!-- Institutional FinTech Master Workspace Island -->
+      <!-- Hydrated with client:load for immediate interactive live streaming and mode selection -->
+      <section id="radar-section" class="w-full">
+        <FintechWorkspace client:load />
       </section>
 
       <!-- Scroll Story Sections (MT Problem, ISO 20022 Migration, SwiftFlow Solution) -->
       <ScrollStory />
-
-      <!-- Live AI Assistant & pacs.008 XML Converter Studio Island -->
-      <section class="w-full py-8">
-        <ConverterPanel client:visible />
-      </section>
     </main>
 
     <!-- Global Footer -->
@@ -99,7 +81,11 @@ const description = 'Interactive 3D visualization of simulated cross-border inte
             entries.forEach((entry) => {
               if (entry.isIntersecting) {
                 const step = entry.target.getAttribute('data-step');
-                // Optional telemetry or camera event
+                if (step) {
+                  window.dispatchEvent(
+                    new CustomEvent('swiftflow:story-step', { detail: { step: Number(step) } })
+                  );
+                }
               }
             });
           },

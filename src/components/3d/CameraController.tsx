@@ -20,9 +20,56 @@ export const CameraController: React.FC<CameraControllerProps> = ({
   const { camera } = useThree();
   const controlsRef = useRef<any>(null);
 
+  // Corridor focus listener from FinTech control deck
+  useEffect(() => {
+    const handleCorridorFocus = (e: CustomEvent<{ center?: [number, number, number] }>) => {
+      const center = e.detail?.center;
+      if (!center) {
+        // Reset to default global orbit
+        if (gsap && gsap.to) {
+          gsap.to(camera.position, { x: 0, y: 1.2, z: 5.4, duration: 1.4, ease: 'power2.inOut' });
+          if (controlsRef.current) {
+            gsap.to(controlsRef.current.target, { x: 0, y: 0, z: 0, duration: 1.4, ease: 'power2.inOut' });
+          }
+        }
+        return;
+      }
+
+      const targetX = center[0] * 1.8;
+      const targetY = center[1] * 1.8;
+      const targetZ = center[2] * 1.8;
+
+      if (gsap && gsap.to) {
+        gsap.to(camera.position, {
+          x: targetX,
+          y: targetY,
+          z: targetZ,
+          duration: 1.5,
+          ease: 'power2.inOut',
+          onUpdate: () => {
+            camera.lookAt(0, 0, 0);
+          },
+        });
+        if (controlsRef.current) {
+          gsap.to(controlsRef.current.target, {
+            x: 0,
+            y: 0,
+            z: 0,
+            duration: 1.5,
+            ease: 'power2.inOut',
+          });
+        }
+      }
+    };
+
+    window.addEventListener('swiftflow:focus-corridor' as any, handleCorridorFocus as EventListener);
+    return () => {
+      window.removeEventListener('swiftflow:focus-corridor' as any, handleCorridorFocus as EventListener);
+    };
+  }, [camera]);
+
   // Smoothly move camera based on scroll story section
   useEffect(() => {
-    // If reduced motion is preferred, jump or minimal move
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const duration = prefersReducedMotion ? 0.1 : 1.8;
 
@@ -30,19 +77,19 @@ export const CameraController: React.FC<CameraControllerProps> = ({
     let targetLookAt = { x: 0, y: 0, z: 0 };
 
     switch (currentSection) {
-      case 0: // Hero Overview
+      case 0:
         targetCamPos = { x: 0, y: 1.2, z: 5.4 };
         targetLookAt = { x: 0, y: 0, z: 0 };
         break;
-      case 1: // Section 1: The Problem (Legacy MT) - Atlantic Corridor (NYC - LON)
+      case 1:
         targetCamPos = { x: -1.8, y: 2.2, z: 4.2 };
         targetLookAt = { x: -0.4, y: 0.8, z: 1.2 };
         break;
-      case 2: // Section 2: ISO 20022 Migration - Eurasian / Asian Dollar corridors
+      case 2:
         targetCamPos = { x: 3.2, y: 1.8, z: 3.8 };
         targetLookAt = { x: 1.2, y: 0.5, z: 1.5 };
         break;
-      case 3: // Section 3: The Solution / Modern Rail - Top-down Global perspective
+      case 3:
         targetCamPos = { x: 0.5, y: 3.8, z: 3.4 };
         targetLookAt = { x: 0, y: 0, z: 0 };
         break;
